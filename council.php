@@ -1,7 +1,6 @@
 <?php
 require_once 'db.php';
 require_once 'post.php';
-require_once 'main.php';
 
 class CCD
 {
@@ -49,14 +48,14 @@ if (isset($_GET['id'])) {
     if (!has_district($_GET['county'], $_GET['district'])) {
         header("Location: " . basename(__FILE__));
         die;
-    }    
+    }
     $title = $_GET['county'] . " " . sprintf("%02d", $_GET['district']) . " 選區";
     $status = 'district';
 
-} else if(!empty($_GET)){
-    
+} else if (!empty($_GET)) {
+
     header("Location: " . basename(__FILE__));
-    die;   
+    die;
 
 } else {
 
@@ -72,6 +71,8 @@ if (isset($_GET['id'])) {
 <meta charset="UTF-8">
 <title><?php echo $title; ?></title>
 <link type="text/css" rel="stylesheet" href="css/candidate.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="js/form-validate.js"></script>
 </head>
 <body>
 
@@ -95,8 +96,8 @@ if ($status == 'candidate') {
         <h2>留下訊息</h2>
         <input name="candidate_id" type="hidden" value="<?php echo $_GET['id']; ?>" />
         <p><textarea id="content" name="content" maxlength="5000" ></textarea></p>
-        <p>您的姓名: <input id="author" name="author" type="text" maxlength="30" />
-        <input id="submit" type="submit" value="提交" /></p>
+        <p>您的暱稱: <input id="author" name="author" type="text" maxlength="30" />
+        <input id="submit" type="submit" value="提交" /><span id="errm"></span</p>
     </form>
 
     <?

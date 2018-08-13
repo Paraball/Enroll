@@ -1,8 +1,12 @@
-form{
+form {
     margin: 10px;
 }
 
-#content{
+#content {
     height: 300px;
     width: 600px;
+}
+
+#errm {
+    color: red;
 }
