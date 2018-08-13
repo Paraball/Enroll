@@ -1,12 +1,6 @@
 <?php
-
 require_once 'db.php';
 require_once 'post.php';
-
-function echo_success()
-{
-    echo 'Your post has been submitted.';
-}
 
 function req_exists()
 {
@@ -22,7 +16,7 @@ function is_req_valid()
     && !empty($_POST['content']);
 }
 
-function verify()
+function verify() //TODO
 {
     return true;
 }
@@ -40,6 +34,7 @@ function verify()
 <?php
 
 if (req_exists() && is_req_valid()) {
+   
     if (verify() && save_post($_POST['candidate_id'], $_POST['author'], $_POST['content'])) {
         echo "Post saved.";
     } else {

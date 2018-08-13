@@ -3,7 +3,6 @@ require_once 'db.php';
 
 class Post
 {
-
     public $author;
     public $time;
     public $content;
