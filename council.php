@@ -58,11 +58,12 @@ if (isset($_GET['id'])) {
 <!DOCTYPE>
 <html>
 <head>
-<meta charset="UTF-8">
-<title><?php echo $title; ?></title>
-<link type="text/css" rel="stylesheet" href="css/candidate.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="js/form-validate.js"></script>
+    <meta charset="UTF-8">
+    <title><?php echo $title; ?></title>
+    <link type="text/css" rel="stylesheet" href="css/candidate.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+    <script src="js/form-validate.js"></script>
 </head>
 <body>
 
@@ -88,6 +89,7 @@ if ($status == 'candidate') {
         <input name="prevent_repeat_saving" type="hidden" value="<?php echo $r; ?>" />
         <p><textarea id="content" name="content" maxlength="5000" ></textarea></p>
         <p>您的暱稱: <input id="author" name="author" type="text" maxlength="30" />
+        <div class="g-recaptcha" data-sitekey="6Lff5WkUAAAAAC-tsW7S0CtD4BD35DD4d41Oi92i"></div>
         <input id="submit" type="submit" value="提交" /><span id="errm"></span></p>
     </form>
 

@@ -19,10 +19,31 @@ function is_req_valid()
     && !empty($_POST['content']);
 }
 
-function verify() //TODO
-
+function verify()
 {
-    return true;
+    if (!isset($_POST["g-recaptcha-response"]) || empty($_POST["g-recaptcha-response"])) {
+        return false;
+    }
+
+    $data = array(
+        'secret' => '6Lff5WkUAAAAAEyv7SOG2lfsbxnv-CYzkB8QUhC8',
+        'response' => $_POST["g-recaptcha-response"],
+    );
+    $url = 'https://www.google.com/recaptcha/api/siteverify';
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+    $result = curl_exec($ch);
+    curl_close($ch);
+
+    if ($result) {
+        $json = json_decode($result, true);
+        return $json['success'] == true;
+    }
+    return false;
+
 }
 
 function prevent_repeat_saving()
@@ -39,19 +60,23 @@ function prevent_repeat_saving()
 <!DOCTYPE>
 <html>
 <head>
-<meta charset="urf-8">
-<title>提交頁面</title>
+    <meta charset="urf-8">
+    <title>提交頁面</title>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 <body>
 
 <?php
 
 if (req_exists() && is_req_valid()) {
-
-    if (verify() && prevent_repeat_saving()) {
-        echo "Post saved.";
+    if (prevent_repeat_saving()) {
+        if (verify()) {
+            echo "Post saved.";
+        } else {
+            echo "Verify failed.";
+        }
     } else {
-        echo "Post not saved.";
+        echo "Repeated post not saved.";
     }
 }
 
