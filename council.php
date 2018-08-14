@@ -2,6 +2,10 @@
 require_once 'db.php';
 require_once 'post.php';
 
+session_start();
+$r = '' . rand();
+$_SESSION['prevent_repeat_saving'][$r] = '1';
+
 class CCD
 {
 
@@ -95,9 +99,10 @@ if ($status == 'candidate') {
     <form action="submit.php" method="POST">
         <h2>留下訊息</h2>
         <input name="candidate_id" type="hidden" value="<?php echo $_GET['id']; ?>" />
+        <input name="prevent_repeat_saving" type="hidden" value="<?php echo $r; ?>" />
         <p><textarea id="content" name="content" maxlength="5000" ></textarea></p>
         <p>您的暱稱: <input id="author" name="author" type="text" maxlength="30" />
-        <input id="submit" type="submit" value="提交" /><span id="errm"></span</p>
+        <input id="submit" type="submit" value="提交" /><span id="errm"></span></p>
     </form>
 
     <?
