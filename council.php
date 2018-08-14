@@ -1,6 +1,7 @@
 <?php
 require_once 'db.php';
 require_once 'post.php';
+require_once 'sterilize.php';
 
 session_start();
 $r = '' . rand();
@@ -20,21 +21,6 @@ class CCD
         $this->id = $id;
     }
 
-}
-
-function sterilize_page()
-{
-    if (!isset($_GET['page'])) {
-        return 1;
-    }
-    $page = $_GET['page'];
-    if (!is_numeric($page)) {
-        return 1;
-    }
-    if ($page <= 0) {
-        return 1;
-    }
-    return $page;
 }
 
 if (isset($_GET['id'])) {
@@ -84,7 +70,7 @@ if (isset($_GET['id'])) {
 
 if ($status == 'candidate') {
 
-    $posts = get_posts($_GET['id'], sterilize_page());
+    $posts = get_posts($_GET['id'], sterilize_get('page', 1));
     if (empty($posts)) {
         echo "<p>目前沒有訊息。</p>";
     } else {

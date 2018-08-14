@@ -29,7 +29,6 @@ function prevent_repeat_saving()
 {
     if (isset($_SESSION['prevent_repeat_saving'][$_POST['prevent_repeat_saving']])) {
         unset($_SESSION['prevent_repeat_saving'][$_POST['prevent_repeat_saving']]);
-        echo "Sesssion unset";
         return save_post($_POST['candidate_id'], $_POST['author'], $_POST['content']);
     }
     return false;

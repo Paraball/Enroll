@@ -21,7 +21,7 @@ function get_posts($id, $page)
     $from = ($page - 1) * $post_per_page;
     global $conn;
     $sql = "SELECT author, content, time FROM posts "
-        . "WHERE candidate_id='$id' AND status=0 "
+        . "WHERE candidate_id='$id' AND status=1 "
         . "ORDER BY time DESC "
         . "LIMIT $from, $post_per_page";
     $result = $conn->query($sql);
