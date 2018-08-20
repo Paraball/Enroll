@@ -1,39 +1,27 @@
 <?php
-require_once 'db.php';
+require_once 'candidate.php';
 require_once 'post.php';
 require_once 'sterilize.php';
 
 session_start();
-$r = '' . rand();
+$r = rand();
 $_SESSION['prevent_repeat_saving'][$r] = '1';
 
-class CCD
-{
-
-    public $name;
-    public $party;
-    public $id;
-
-    public function __construct($name, $party, $id)
-    {
-        $this->name = $name;
-        $this->party = $party;
-        $this->id = $id;
-    }
-
-}
-
+//A candidate's page
 if (isset($_GET['id'])) {
 
-    $name = get_name($_GET['id']);
-    if (!$name) {
+    $cand = Candidate::get_candidate($_GET['id']);
+    if (!$cand) {
         header("Location: " . basename(__FILE__));
         die;
     }
-    $title = $name;
+    $title = $cand->name;
     $status = 'candidate';
 
-} else if (isset($_GET['county']) && isset($_GET['district'])) {
+}
+
+//A district list
+else if (isset($_GET['county']) && isset($_GET['district'])) {
 
     if (!has_district($_GET['county'], $_GET['district'])) {
         header("Location: " . basename(__FILE__));
@@ -42,13 +30,16 @@ if (isset($_GET['id'])) {
     $title = $_GET['county'] . " " . sprintf("%02d", $_GET['district']) . " 選區";
     $status = 'district';
 
-} else if (!empty($_GET)) {
+}
 
+//Sterilize invalid arguments
+else if (!empty($_GET)) {
     header("Location: " . basename(__FILE__));
     die;
+}
 
-} else {
-
+//Homepage
+else {
     $title = "首頁";
     $status = 'home';
 }
@@ -61,7 +52,9 @@ if (isset($_GET['id'])) {
     <meta charset="UTF-8">
     <title><?php echo $title; ?></title>
     <link type="text/css" rel="stylesheet" href="css/candidate.css">
+    <!-- import jq -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- import Google recaptcha -->
     <script src='https://www.google.com/recaptcha/api.js'></script>
     <script src="js/form-validate.js"></script>
 </head>
@@ -69,15 +62,21 @@ if (isset($_GET['id'])) {
 
 <?php
 
-if ($status == 'candidate') {
+//A candidate's page
+if ($status === 'candidate') {
 
-    $posts = get_posts($_GET['id'], sterilize_get('page', 1));
+    $posts = Post::get_posts($_GET['id'], sterilize_get('page', 1));
+
+    //If no posts
     if (empty($posts)) {
         echo "<p>目前沒有訊息。</p>";
-    } else {
+    }
+
+    //If any posts exist
+    else {
         foreach ($posts as &$p) {
-            echo "<h3>$p->author</h3>";
-            echo "<p>$p->content</p>";
+            echo "<p>$p->cont</p>";
+            echo "<p>$p->ev_cont</p>";
             echo "<p>$p->time</p><hr>";
         }
     }
@@ -87,26 +86,35 @@ if ($status == 'candidate') {
         <h2>留下訊息</h2>
         <input name="candidate_id" type="hidden" value="<?php echo $_GET['id']; ?>" />
         <input name="prevent_repeat_saving" type="hidden" value="<?php echo $r; ?>" />
-        <p><textarea id="content" name="content" maxlength="5000" ></textarea></p>
-        <p>您的暱稱: <input id="author" name="author" type="text" maxlength="30" />
+        <h3>請在這裡輸入有佐證的訊息：</h3>
+        <p><textarea class="content" id="ev_cont" name="ev_cont" maxlength="5000" ></textarea></p>
+        <h3>請在這裡輸入未佐證的訊息：</h3>
+        <p><textarea class="content" id="cont" name="cont" maxlength="5000" ></textarea></p>
+        <h3>若您有訊息要留給管理員，請在此輸入：</h3>
+        <p><textarea class="content" id="message" name="message" maxlength="5000" ></textarea></p>
+        <h3>您的信箱：</h3>
+        <p><input id="au_email" name="au_email" type="email" maxlength="30" /></p>
         <div class="g-recaptcha" data-sitekey="6Lff5WkUAAAAAC-tsW7S0CtD4BD35DD4d41Oi92i"></div>
         <input id="submit" type="submit" value="提交" /><span id="errm"></span></p>
     </form>
 
-    <?
+<?php
+}
 
-} else if ($status == 'district') {
+//A district list
+else if ($status === 'district') {
 
-    $candidates = get_council_candidates($_GET['county'], $_GET['district']);
+    $candidates = Candidate::get_candidates($_GET['county'], $_GET['district']);
     $dis_name = get_district_name($_GET['county'], $_GET['district']);
+    echo "<h1>$title：$dis_name</h1>";
 
-    echo "<h1>$_GET[county] " . sprintf("%02d", $_GET['district']) . " 選區：$dis_name</h1>";
-
+    //If no candidates
     if (empty($candidates)) {
-
         echo "<p>目前沒有表態參選的議員。</p>";
+    }
 
-    } else {
+    //If any candidates exist
+    else {
 
         foreach ($candidates as &$c) {
             if ($c->party == null) {
@@ -120,8 +128,10 @@ if ($status == 'candidate') {
             echo "</a>";
         }
     }
+}
 
-} else if ($status == 'home') {
+//Homepage
+else if ($status === 'home') {
 
     $counties = get_counties();
     foreach ($counties as &$county) {

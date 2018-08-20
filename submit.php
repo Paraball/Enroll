@@ -1,26 +1,28 @@
 <?php
 require_once 'db.php';
 require_once 'post.php';
-
+require_once 'candidate.php';
 session_start();
 
 function req_exists()
 {
     return isset($_POST['candidate_id'])
-    && isset($_POST['author'])
-    && isset($_POST['content'])
+    && isset($_POST['au_email'])
+    && isset($_POST['cont'])
+    && isset($_POST['ev_cont'])
+    && isset($_POST['message'])
     && isset($_POST['prevent_repeat_saving']);
 }
 
 function is_req_valid()
 {
-    return get_name($_POST['candidate_id'])
-    && !empty($_POST['author'])
-    && !empty($_POST['content']);
+    return Candidate::get_candidate($_POST['candidate_id'])
+    && !empty($_POST['au_email']) && (!empty($_POST['cont']) || !empty($_POST['ev_cont']));
 }
 
 function verify()
 {
+    return true; //TODO test;
     if (!isset($_POST["g-recaptcha-response"]) || empty($_POST["g-recaptcha-response"])) {
         return false;
     }
@@ -40,17 +42,17 @@ function verify()
 
     if ($result) {
         $json = json_decode($result, true);
-        return $json['success'] == true;
+        $scs = $json['success'];
+        return $scs === "true" || $scs === true;
     }
     return false;
-
 }
 
 function prevent_repeat_saving()
 {
     if (isset($_SESSION['prevent_repeat_saving'][$_POST['prevent_repeat_saving']])) {
         unset($_SESSION['prevent_repeat_saving'][$_POST['prevent_repeat_saving']]);
-        return save_post($_POST['candidate_id'], $_POST['author'], $_POST['content']);
+        return Post::save_post($_POST['candidate_id'], $_POST['au_email'], $_POST['ev_cont'], $_POST['cont'], $_POST['message']);
     }
     return false;
 }
@@ -78,6 +80,8 @@ if (req_exists() && is_req_valid()) {
     } else {
         echo "Repeated post not saved.";
     }
+} else {
+    echo "ERROR";
 }
 
 ?>
