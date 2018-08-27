@@ -1,0 +1,92 @@
+/* html, body */
+
+body {
+    padding: 24px 0px;
+}
+
+p {
+    margin: 0.5em 0;
+}
+
+.meta-name {
+    margin-right: 3px;
+    position: relative;
+    top: -2px;
+}
+
+/* left bar */
+
+.photo img {
+    width: 100%;
+}
+
+.data {
+    margin-top: 18px;
+    font-size: 20px;
+}
+
+.data, .lmsg, .sel-opt {
+    padding: 12px 0;
+    border-top: solid gainsboro 1px;
+}
+
+.lmsg input {
+    width: 100%;
+}
+
+.data p {
+    margin: 0.2em 0;
+}
+
+.data .meta-name {
+    min-width: 4em;
+}
+
+.sel-opt {
+    padding-bottom: 0;
+}
+
+/* board */
+
+.board {
+    margin: 0px 0px 16px 0px;
+}
+
+.msg {
+    border-right: solid gainsboro 1.5px;
+    position: relative;
+}
+
+.msg .meta-name {
+    min-width: 5em;
+}
+
+.cont {
+    text-align: justify;
+    color: #333;
+    font-size: 16px;
+}
+
+.vtitle {
+    font-weight: bold;
+    text-align: right;
+}
+
+.tool a {
+    margin-right: 6px;
+}
+
+.ev{
+    margin-bottom: 0.5em;
+}
+
+.nev {
+    padding: 0.5em;
+    padding-left: 1em;
+    background: #FEE;
+    border-radius: 3px;
+}
+
+.nev p:first-child , .ev p:first-child{
+    margin-top: 0px;
+}
