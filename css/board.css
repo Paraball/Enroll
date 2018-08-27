@@ -14,6 +14,13 @@ p {
     top: -2px;
 }
 
+.top-hint {
+    background: lightgreen;
+    border-radius: 3px;
+    padding: 0.5em;
+    margin-bottom: 1.25em;
+}
+
 /* left bar */
 
 .photo img {
@@ -49,12 +56,17 @@ p {
 /* board */
 
 .board {
-    margin: 0px 0px 16px 0px;
+    margin: 0 0 1.25em 0;
+}
+
+.meta-cont {
+    display: inline-block;
 }
 
 .msg {
     border-right: solid gainsboro 1.5px;
     position: relative;
+    padding-left: 0;
 }
 
 .msg .meta-name {
@@ -65,6 +77,7 @@ p {
     text-align: justify;
     color: #333;
     font-size: 16px;
+    padding-right: 0;
 }
 
 .vtitle {
@@ -76,17 +89,51 @@ p {
     margin-right: 6px;
 }
 
-.ev{
-    margin-bottom: 0.5em;
-}
-
 .nev {
-    padding: 0.5em;
-    padding-left: 1em;
+    padding: 0.5em 1em 0.5em 1em;
     background: #FEE;
     border-radius: 3px;
 }
 
-.nev p:first-child , .ev p:first-child{
-    margin-top: 0px;
+.nev p:first-child, .ev p:first-child {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.ev p:last-child, .nev p:last-child {
+    margin-bottom: 0;
+}
+
+.ev p:first-child {
+    margin-top: 0;
+}
+
+.ev + .nev {
+    margin-top: 0.5em;
+}
+
+@media only screen and (max-width: 768px) {
+    .photo {
+        display: none;
+    }
+    .data {
+        border-top: 0;
+        margin-top: 0;
+    }
+}
+
+@media only screen and (max-width: 576px) {
+    .cont {
+        padding-left: 0;
+    }
+    .msg {
+        border-right: 0;
+    }
+    .board {
+        padding-left: 1em;
+        border-left: solid gainsboro 1.5px;
+    }
+    .msg p:first-child{
+        margin-top: 0;
+    }
 }

@@ -11,7 +11,7 @@ function init()
         die;
     }
     $res = query(
-        "SELECT * FROM council_candidates
+        "SELECT * FROM candidates
          WHERE id='$_GET[candidate_id]'
          LIMIT 1"
     );
@@ -22,7 +22,7 @@ function init()
 
     $row = mysqli_fetch_assoc($res);
 
-    global $candidate_id, $county, $district, $party;
+    global $candidate_name, $county, $district, $party;
     $candidate_name = $row['name'];
     $county = $row['county'];
     $district = $row['district'];
@@ -96,13 +96,18 @@ sterilize_view();
 
 function post($time, $id, $ev_cont, $cont)
 {
+    $time = strtotime($time);
     ?>
 
 <div class="board row">
     <div class="col-sm-3 msg">
         <p>
+            <span class="meta-name badge badge-info">Date</span>
+            <span class="meta-cont"><?echo date('Y-m-d', $time); ?></span>
+        </p>
+        <p>
             <span class="meta-name badge badge-info">Time</span>
-            <span class="meta-cont"><?echo date('Y-m-d', strtotime($time)); ?></span>
+            <span class="meta-cont"><?echo date('H:i:s', $time); ?></span>
         </p>
         <p>
             <span class="meta-name badge badge-info">Post ID</span>
@@ -152,8 +157,19 @@ function post($time, $id, $ev_cont, $cont)
 <body>
 
     <div class="container">
+<?
+if (isset($_GET['post'])) {
+?>
+<div class="row">
+    <div class="col-sm-12 text-center">
+        <p class="top-hint">您的留言已經提交，請等待管理員審查。</p>
+    </div>
+</div>
+<?
+}
+?>
         <div class="row">
-            <div class="col-md-3 left">
+            <div class="col-md-3">
                 <div class="photo">
                     <img src="image/null.png" />
                 </div>
@@ -228,7 +244,7 @@ if (is_admin()) {
                     </form>
                 </div>
                 <div class="lmsg">
-                    <form method="GET" action="submit.php"><div class="form-group">
+                    <form method="GET" action="comment.php"><div class="form-group">
                         <input type="hidden" name="candidate_id" value="<?echo $_GET['candidate_id']; ?>" />
                         <input type="submit" value="我要留言" class="btn btn-primary" />
                     </div></form>
@@ -243,16 +259,16 @@ if ($view != '0') {
     $selected .= ", evident_content";
 }
 if ($view != '1') {
-    $selected .= ", content";
+    $selected .= ", inevident_content";
 }
 $selected .= ", post_time";
 $where = "candidate_id='$_GET[candidate_id]' AND post_status=1";
 if ($view == '0') {
-    $where .= " AND content IS NOT NULL";
+    $where .= " AND inevident_content IS NOT NULL";
 } else if ($view == '1') {
     $where .= " AND evident_content IS NOT NULL";
 }
-$pt = "post_time " . ($order ? "DESC" : "ASC");
+$pt = "post_id " . ($order ? "DESC" : "ASC");
 
 if (is_admin()) {
 
@@ -266,7 +282,7 @@ if (is_admin()) {
         "
     );
     while ($row = mysqli_fetch_assoc($res)) {
-        post($row['post_time'], $row['post_id'], $row['evident_content'], $row['content']);
+        post($row['post_time'], $row['post_id'], $row['evident_content'], $row['inevident_content']);
     }
 }
 

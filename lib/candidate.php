@@ -69,7 +69,7 @@ class Candidate
 
     public static function get_candidate($cand_id)
     {
-        $sql = "SELECT name, county, district, party FROM council_candidates "
+        $sql = "SELECT name, county, district, party FROM candidates "
             . "WHERE id='$cand_id' "
             . "LIMIT 1;";
         $result = query($sql);
@@ -88,7 +88,7 @@ class Candidate
             //Name and id only
             if ($mode == 'simple') {
                 $result = query("SELECT name, id "
-                    . "FROM council_candidates "
+                    . "FROM candidates "
                     . "WHERE county='$county' AND district=$district "
                     . "ORDER BY name ASC;");
                 while ($row = mysqli_fetch_assoc($result)) {
@@ -99,7 +99,7 @@ class Candidate
             //Candidate object
             else if ($mode == 'standard') {
                 $result = query("SELECT name, party, id "
-                    . "FROM council_candidates "
+                    . "FROM candidates "
                     . "WHERE county='$county' AND district='$district' "
                     . "ORDER BY name ASC;");
                 while ($row = mysqli_fetch_assoc($result)) {

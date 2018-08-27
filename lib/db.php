@@ -13,3 +13,8 @@ function query($sql)
     global $conn;
     return $conn->query($sql);
 }
+
+function sterilize_null(&$arg)
+{
+    $arg = $arg === null ? "NULL" : "'$arg'";
+}
