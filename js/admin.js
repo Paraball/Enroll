@@ -1,39 +1,49 @@
 "use strict";
+
 (function () {
+
     let $selCt = $('#county');
     let $selDt = $('#district');
-    let $selCn = $('#cccd');
-    let $submit = $('#submit');
+    let $selCn = $('#candidate');
 
     $selCt.change(function () {
-        let selOpt = $selCt.val();
-        console.log(selOpt + " is selected.");
-        $selDt.empty();
+        let val = $selCt.val();
+        console.log(val);
+        if (!val) {
+            $selDt.empty().attr('disabled', true).append('<option value="">所有選區</option>');
+            $selCn.empty().attr('disabled', true).append('<option value="">所有擬參選人</option>')
+            return;
+        }
         $.get('search.php', {
             type: 'council',
-            county: selOpt,
+            county: val,
         }, function (data) {
             data = JSON.parse(data);
             let i = 1;
+            $selDt.empty().append('<option value="">所有選區</option>');
             for (let d of data) {
                 $selDt.append(
                     $('<option></option>').attr('value', i).html('【' + (i < 10 ? '0' + i : i) + '】' + d['district_name'])
                 );
                 i++;
             }
-            $selDt.trigger('change');
+            $selDt.attr('disabled', false).trigger('change');
         });
     });
 
     $selDt.change(function () {
-        let selOpt = $selDt.val();
+        let dVal = $selDt.val();
+        if (!dVal) {
+            $selCn.empty().attr('disabled', true).append('<option value="">所有擬參選人</option>');
+            return;
+        }
         $.get('search.php', {
             type: 'council',
             county: $selCt.val(),
-            district: selOpt,
+            district: dVal,
         }, function (data) {
             data = JSON.parse(data);
-            $selCn.empty();
+            $selCn.empty().append('<option value="">所有擬參選人</option>');
             if (data && (!Array.isArray(data) || data.length)) {
                 for (let d of data) {
                     $selCn.append(
@@ -41,20 +51,10 @@
                     );
                 }
                 $selCn.attr('disabled', false);
-                $submit.attr('disabled', false);
                 return;
             }
-            $selCn.attr('disabled', true);
-            $selCn.append($('<option>目前沒有已知的擬參選人</option>'));
-            $submit.attr('disabled', true);
+            $selCn.attr('disabled', true).html('<option>尚無擬參選人</option>');
         });
-    });
-
-    $submit.click(function () {
-        $.cookie('county', $selCt.val());
-        $.cookie('district', $selDt.val());
-        $.cookie('candidate', $selCn.val());
-        return true;
     });
 
 })();

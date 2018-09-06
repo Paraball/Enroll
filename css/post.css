@@ -1,0 +1,126 @@
+p {
+    margin: 0.5em 0;
+}
+
+.empty{
+    font-size: 20px;
+    color: grey;
+    text-align: center;
+    display: block;
+    border: lightgray solid 0.8px;
+    border-radius: 0.2em;
+    padding: 0.5em;
+}
+
+.board {
+    margin-bottom: 1.25em;
+}
+
+.meta-name {
+    margin-right: 8px;
+    position: relative;
+    top: -2px;
+}
+
+.meta-cont {
+    display: inline-block;
+    word-wrap: break-word;
+}
+
+.msg {
+    border-right: solid gainsboro 1.5px;
+    position: relative;
+    padding-left: 0;
+}
+
+.msg .meta-name {
+    min-width: 5em;
+}
+
+.cont {
+    text-align: justify;
+    color: #333;
+    font-size: 16px;
+    padding-right: 0;
+}
+
+.vtitle {
+    font-weight: bold;
+    text-align: right;
+}
+
+.links a {
+    margin-right: 6px;
+    display: inline-block;
+}
+
+.ev, .nev , .secret {
+    padding: 0.5em 1em 0.5em 1em;
+    border-radius: 3px;
+}
+
+.ev{
+    background: #DFD;
+}
+
+.nev{
+    background: #FEE;
+}
+
+.secret {
+    margin-top: 0.5em;
+    background: whitesmoke;
+    color: grey;
+}
+
+.nev p:first-child, .ev p:first-child {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.ev+.nev {
+    margin-top: 0.5em;
+}
+
+.ev p:first-child, .nev p:first-child, .msg p:first-child , .secret p:first-child  {
+    margin-top: 0;
+}
+
+.ev p:last-child, .nev p:last-child , .secret p:last-child {
+    margin-bottom: 0;
+}
+
+@media only screen and (max-width: 992px) {
+    .links a, .meta-cont {
+        display: block;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .cont {
+        padding-left: 0;
+    }
+    .msg {
+        border-right: 0;
+    }
+    .board {
+        padding-left: 1em;
+        border-left: solid gainsboro 1.5px;
+    }
+    .msg p:first-child {
+        margin-top: 0;
+    }
+    .links a {
+        display: inline-block;
+    }
+}
+
+@media only screen and (max-width: 576px) {
+    .meta-cont {
+        display: inline-block;
+    }
+    .board{
+        padding-right: 1em;
+    }
+
+}

@@ -18,3 +18,7 @@ function sterilize_null(&$arg)
 {
     $arg = $arg === null ? "NULL" : "'$arg'";
 }
+
+function get_affected(){
+    return $conn->affected_rows;
+}

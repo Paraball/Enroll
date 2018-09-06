@@ -11,28 +11,12 @@
 
 require_once 'lib/db.php';
 require_once 'lib/pvdup.php';
+require_once 'lib/sterilize.php';
 
 $ev_cont = null;
 $cont = null;
 $msg = null;
 $email = null;
-
-function txt_to_sql_content($txt)
-{
-    if (empty($txt)) {
-        return null;
-    }
-    $str = "";
-    $txt = explode(PHP_EOL, $txt);
-    foreach ($txt as $t) {
-        $t = str_replace("　", "", $t);
-        if ($t === "" || ctype_space($t)) {
-            continue;
-        }
-        $str .= "<p>" . htmlentities($t) . "</p>";
-    }
-    return $str ? $str : null;
-}
 
 function req_exists()
 {
@@ -69,7 +53,7 @@ function is_req_valid()
     }
 
     //Verify candidate's id
-    $res = query("SELECT * FROM candidates WHERE id='$_POST[candidate_id]' LIMIT 1");
+    $res = query("SELECT * FROM candidates WHERE candidate_id='$_POST[candidate_id]' LIMIT 1");
     if (!mysqli_num_rows($res)) {
         return "CANDIDATE ID INVALID";
     }
@@ -130,4 +114,3 @@ if ($v === null) {
 } else {
     header("Location: index.php");
 }
-?>

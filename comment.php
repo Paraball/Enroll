@@ -6,8 +6,8 @@ if (!isset($_GET['candidate_id'])) {
     die;
 }
 $res = query(
-    "SELECT name, county, district FROM candidates
-     WHERE id='$_GET[candidate_id]'
+    "SELECT candidate_name, county, district FROM candidates
+     WHERE candidate_id='$_GET[candidate_id]'
      LIMIT 1"
 );
 if (!mysqli_num_rows($res)) {
@@ -16,11 +16,16 @@ if (!mysqli_num_rows($res)) {
 $row = mysqli_fetch_assoc($res);
 $county = $row['county'];
 $district = $row['district'];
-$candidate_name = $row['name'];
 
+$candidate_name = $row['candidate_name'];
+
+$res = query("SELECT district_name FROM districts WHERE county='$county' AND district=$district LIMIT 1");
+$row = mysqli_fetch_assoc($res);
+if ($district < 10) {
+    $district = '0' . $district;
+}
+$district = "【 $district 】$row[district_name]";
 ?>
-
-
 
 <!doctype html>
 <html>
@@ -36,35 +41,35 @@ $candidate_name = $row['name'];
     <div class="container">
         <form action="submit.php" method="POST">
             <div class="row">
-                <div class="col-sm-3 form-group">
+                <div class="col-sm-2 form-group">
                     <label for="county">縣市</label>
                     <select id="county" class="form-control" disabled="true">
                         <option><?echo $county; ?></option>
                     </select>
                 </div>
-                <div class="col-sm-3 form-group">
+                <div class="col-sm-6 form-group">
                     <label for="district">選區</label>
                     <select id="district" class="form-control" disabled="true">
                     <option><?echo $district; ?></option>
                     </select>
                 </div>
-                <div class="col-sm-3 form-group">
+                <div class="col-sm-2 form-group">
                     <label for="candidate_name">擬參選人</label>
                     <select id="candidate_name" class="form-control" disabled="true">
                     <option><?echo $candidate_name; ?></option>
                     </select>
                 </div>
-                <div class="col-sm-3 form-group">
+                <div class="col-sm-2 form-group">
                     <label for="cand_id">ID</label>
                     <input type="text" id="cand_id" disabled="true" class="form-control" value="<?echo "#" . $_GET['candidate_id']; ?>" />
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-6 form-group">
+                <div class="col-md-6 form-group">
                     <label>已驗證的訊息</label>
                     <textarea name="ev_cont" id="ev-cont" rows="10" class="form-control" placeholder="已有佐證的訊息輸入於此，並請在下方提供佐證資料。若無則留空。"></textarea>
                 </div>
-                <div class="col-sm-6 form-group">
+                <div class="col-md-6 form-group">
                     <label>未驗證的訊息</label>
                     <textarea name="cont" id="cont" rows="10" class="form-control" placeholder="尚無佐證的訊息輸入於此。若無則留空。"></textarea>
                 </div>
@@ -87,8 +92,8 @@ $candidate_name = $row['name'];
                     <div class="g-recaptcha" data-sitekey="6Lff5WkUAAAAAC-tsW7S0CtD4BD35DD4d41Oi92i" data-callback="onRecaptcha" ></div>
                 </div>
             </div>
-            <input type="hidden" name="pvdup" value="<? register_pvdup(); ?>" />
-            <input type="hidden" name="candidate_id" value="<? echo $_GET['candidate_id']; ?>" />
+            <input type="hidden" name="pvdup" value="<?register_pvdup();?>" />
+            <input type="hidden" name="candidate_id" value="<?echo $_GET['candidate_id']; ?>" />
             <div class="row">
                 <div class="col-sm-12 form-group">
                     <label>完成</label>

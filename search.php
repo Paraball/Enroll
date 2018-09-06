@@ -1,23 +1,39 @@
 <?php
-require_once 'lib/candidate.php';
+require_once 'lib/db.php';
 
-if (!isset($_POST['type']) || !isset($_POST['county'])) {
+if (!isset($_GET['type']) || !isset($_GET['county'])) {
     die;
 }
 
 //Council candidates
-if ($_POST['type'] === 'council') {
+if ($_GET['type'] === 'council') {
 
     //Response candidates
-    if (isset($_POST['district'])) {
-        $candidates = Candidate::get_candidates($_POST['county'], $_POST['district'], 'simple');
-        echo json_encode($candidates);
+    if (isset($_GET['district'])) {
+        $res = query(
+            "SELECT candidate_id, candidate_name FROM candidates
+             WHERE county='$_GET[county]' AND district=$_GET[district]"
+        );
+        $results = array();
+        while ($row = mysqli_fetch_assoc($res)) {
+            $results[] = $row;
+        }
+        echo json_encode($results);
         die;
     }
 
     //Response districts
     else {
-        echo json_encode(get_districts($_POST['county']));
+        $res = query(
+            "SELECT district_name FROM districts
+             WHERE county='$_GET[county]'
+             ORDER BY district ASC"
+        );
+        $results = array();
+        while ($row = mysqli_fetch_assoc($res)) {
+            $results[] = $row;
+        }
+        echo json_encode($results);
         die;
     }
 

@@ -1,15 +1,11 @@
 /* html, body */
 
-body {
-    padding: 24px 0px;
-}
-
 p {
     margin: 0.5em 0;
 }
 
 .meta-name {
-    margin-right: 3px;
+    margin-right: 8px;
     position: relative;
     top: -2px;
 }
@@ -53,65 +49,6 @@ p {
     padding-bottom: 0;
 }
 
-/* board */
-
-.board {
-    margin: 0 0 1.25em 0;
-}
-
-.meta-cont {
-    display: inline-block;
-}
-
-.msg {
-    border-right: solid gainsboro 1.5px;
-    position: relative;
-    padding-left: 0;
-}
-
-.msg .meta-name {
-    min-width: 5em;
-}
-
-.cont {
-    text-align: justify;
-    color: #333;
-    font-size: 16px;
-    padding-right: 0;
-}
-
-.vtitle {
-    font-weight: bold;
-    text-align: right;
-}
-
-.tool a {
-    margin-right: 6px;
-}
-
-.nev {
-    padding: 0.5em 1em 0.5em 1em;
-    background: #FEE;
-    border-radius: 3px;
-}
-
-.nev p:first-child, .ev p:first-child {
-    margin-top: 0;
-    margin-bottom: 0;
-}
-
-.ev p:last-child, .nev p:last-child {
-    margin-bottom: 0;
-}
-
-.ev p:first-child {
-    margin-top: 0;
-}
-
-.ev + .nev {
-    margin-top: 0.5em;
-}
-
 @media only screen and (max-width: 768px) {
     .photo {
         display: none;
@@ -120,20 +57,8 @@ p {
         border-top: 0;
         margin-top: 0;
     }
+    .data .meta-cont{
+        display: inline-block;
+    }
 }
 
-@media only screen and (max-width: 576px) {
-    .cont {
-        padding-left: 0;
-    }
-    .msg {
-        border-right: 0;
-    }
-    .board {
-        padding-left: 1em;
-        border-left: solid gainsboro 1.5px;
-    }
-    .msg p:first-child{
-        margin-top: 0;
-    }
-}
