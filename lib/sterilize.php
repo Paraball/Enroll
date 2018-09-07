@@ -29,5 +29,5 @@ function txt_to_sql_content($txt)
 }
 
 function html_to_txt($html){
-    return str_replace("</p>", "", str_replace("<p>", "\n\n", $html));
+    return substr(str_replace("</p>", "\n\n", str_replace("<p>", "", $html)),0, -2);
 }

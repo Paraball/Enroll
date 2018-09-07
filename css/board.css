@@ -11,10 +11,17 @@ p {
 }
 
 .top-hint {
-    background: lightgreen;
+    background: #CFC;
     border-radius: 3px;
     padding: 0.5em;
     margin-bottom: 1.25em;
+    margin-right: -15px;
+}
+
+@media only screen and (max-width: 768px) {
+    .top-hint{
+        margin-right: 0;
+    }
 }
 
 /* left bar */

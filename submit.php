@@ -35,7 +35,7 @@ function is_req_valid()
     }
 
     //Verify pvdup
-    if (!verify_pvdup()) {
+    if (!verify_pvdup('cmt')) {
         return "PVDUP FAILED";
     }
 

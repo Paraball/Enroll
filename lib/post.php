@@ -70,7 +70,7 @@ function view_posts($candidate, $page = 1, $order = 1, $evident = 2, $ppp = 6)
     $limit = ($page - 1) * $ppp;
     $sql .= " LIMIT $limit, $ppp";
     $res = query($sql);
-    if(!mysqli_num_rows($res)){
+    if (!mysqli_num_rows($res)) {
         echo "<p class='empty'>查無文章</p>";
         return;
     }
@@ -119,7 +119,7 @@ function manage_posts($candidate, $page = 1, $order = 1, $evident = 2, $status =
     $limit = ($page - 1) * $ppp;
     $sql .= " LIMIT $limit, $ppp";
     $res = query($sql);
-    if(!mysqli_num_rows($res)){
+    if (!mysqli_num_rows($res)) {
         echo "<p class='empty'>查無文章</p>";
         return;
     }

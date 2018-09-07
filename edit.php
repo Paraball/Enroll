@@ -1,15 +1,33 @@
 <?php
 require_once 'lib/db.php';
 require_once 'lib/user.php';
+require_once 'lib/sterilize.php';
 
 if (!is_admin()) {
     die;
 }
+
+if (isset($_POST['save'])) {
+    if (isset($_POST['post_id']) && is_numeric($_POST['post_id']) && isset($_POST['ev']) && isset($_POST['nev'])) {
+        $ev = txt_to_sql_content($_POST['ev']);
+        $ev = $ev ? "'$ev'" : "NULL";
+        $nev = txt_to_sql_content($_POST['nev']);
+        $nev = $nev ? "'$nev'" : "NULL";
+        $res = query("UPDATE posts SET evident_content=$ev, inevident_content=$nev WHERE post_id=$_POST[post_id]");
+        if ($res) {
+            header("Location: edit.php?post_id=$_POST[post_id]&success");
+        } else {
+            echo "FAILED";
+        }
+    }
+    die;
+}
+
 if (!isset($_GET['post_id']) || !is_numeric($_GET['post_id'])) {
     die;
 }
 
-$res = query("SELECT * FROM posts WHERE post_id=$_GET[post_id] LIMIT 1");
+$res = query("SELECT evident_content, inevident_content FROM posts WHERE post_id=$_GET[post_id] LIMIT 1");
 if (!mysqli_num_rows($res)) {
     die;
 }
@@ -28,6 +46,7 @@ if (isset($_GET['status'])) {
     die;
 }
 
+$row = mysqli_fetch_assoc($res);
 ?>
 
 <!DOCTYPE html>
@@ -43,26 +62,45 @@ if (isset($_GET['status'])) {
             padding-top: 40px;
             padding-bottom: 40px;
         }
+        .top-hint {
+            background: #CFC;
+            border-radius: 3px;
+            padding: 0.5em;
+            margin-bottom: 1.25em;
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <form>
+<?
+if(isset($_GET['success'])){
+?>
+<div class="row">
+    <div class="col-sm-12 text-center">
+        <p class="top-hint">文章已更新</p>
+    </div>
+</div>
+<?
+}
+?>
+        <form action="edit.php" method="POST">
+            <input type="hidden" name="save" value="1" />
+            <input type="hidden" name="post_id" value="<?echo $_GET['post_id'] ?>" />
             <div class="row">
                 <div class="col-sm-6 form-group">
                     <label>已驗證的訊息</label>
-                    <textarea id="evIn" class="form-control" rows="10"></textarea>
+                    <textarea name="ev" id="evIn" class="form-control" rows="10"><?echo html_to_txt($row['evident_content']); ?></textarea>
                 </div>
                 <div class="col-sm-6 form-group">
                     <label>未驗證的訊息</label>
-                    <textarea id="nevIn" class="form-control" rows="10"></textarea>
+                    <textarea name="nev" id="nevIn" class="form-control" rows="10"><?echo html_to_txt($row['inevident_content']); ?></textarea>
                 </div>
             </div>
             <div class="row">
                 <div class="col-12 form-inline">
                     <input id="preview" type="hidden" class="btn btn-primary mr-sm-2" value="預覽" />
-                    <input type="submit" class="btn btn-primary" value="儲存" />
+                    <input type="submit" class="btn btn-primary" value="儲存" id="submit" />
                 </div>
             </div>
         </form>

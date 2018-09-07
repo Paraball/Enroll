@@ -92,7 +92,7 @@ $district = "【 $district 】$row[district_name]";
                     <div class="g-recaptcha" data-sitekey="6Lff5WkUAAAAAC-tsW7S0CtD4BD35DD4d41Oi92i" data-callback="onRecaptcha" ></div>
                 </div>
             </div>
-            <input type="hidden" name="pvdup" value="<?register_pvdup();?>" />
+            <input type="hidden" name="pvdup" value="<?register_pvdup('cmt');?>" />
             <input type="hidden" name="candidate_id" value="<?echo $_GET['candidate_id']; ?>" />
             <div class="row">
                 <div class="col-sm-12 form-group">

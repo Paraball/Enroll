@@ -1,6 +1,19 @@
 "use strict";
 $(function () {
 
+    let en = [];
+    en['ev'] = true;
+    en['nev'] = true;
+
+    function able(flag, which) {
+        en[which] = flag;
+        if (!en['ev'] && !en['nev']) {
+            $('#submit').attr('disabled', true).val('訊息不可為空');
+        } else {
+            $('#submit').attr('disabled', false).val('儲存');
+        }
+    }
+
     function preview(content, input) {
         $.post(
             'preview.php',
@@ -26,13 +39,18 @@ $(function () {
                 } else {
                     $div.css('display', 'none');
                 }
+                able(data != '', input);
             }
         );
     }
 
-    $('#evIn, #nevIn').bind('input propertychange', function () {
+    function previewAll() {
         preview($('#evIn').val(), 'ev');
         preview($('#nevIn').val(), 'nev');
-    });
+    }
+
+    $('#evIn, #nevIn').bind('input propertychange', previewAll);
+
+    previewAll();
 
 });
